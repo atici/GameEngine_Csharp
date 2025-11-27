@@ -26,14 +26,16 @@ internal static class Program
 		player.transform = new Transform(new Vector2(30, 100), new Vector2(30, 60));
 
 		// Grid 
-		Grid<GameObject> grid = new(20,12, 50f, (g,x,y) => {
+		int gridsize = 50 ;
+		Grid<GameObject> grid = new(20,12, gridsize, (g,x,y) => {
 			GameObject go = new GameObject();
-			go.transform = new Transform(new Vector2(x*50,y*50), new Vector2(50, 50));
+			go.transform = new Transform(new Vector2(x*gridsize,y*gridsize), new Vector2(gridsize,gridsize));
 			return go;
 			});
 
         SDL.SetRenderDrawColor(renderer, 255, 0, 0, 0);
 
+		mainGameLoop.InvokeStart();
         var loop = true;
         while (loop)
         {
@@ -45,7 +47,7 @@ internal static class Program
                     loop = false;
                 }
             }
-			mainGameLoop.UpdateLoop();
+			mainGameLoop.InvokeUpdate();
 
 			SDL.SetRenderDrawColor(renderer, 255, 0, 0, 255);
             SDL.RenderClear(renderer);

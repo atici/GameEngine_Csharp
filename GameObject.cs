@@ -6,18 +6,20 @@ public class GameObject : IDrawable
 	public Transform transform = new();
 	public Color color = new(0, 0, 255, 255);
 
-	internal virtual void _Update(float delta){}
 	internal virtual void _Init(){}
+	internal virtual void _Start(){}
+	internal virtual void _Update(float delta){}
 
 	public GameObject()
 	{
-		MainGameLoop.UpdateEvent += (s, d) => _Update(d); 
+		MainGameLoop.Start += (s, e) => _Start(); 
+		MainGameLoop.Update += (s, d) => _Update(d); 
 		_Init();
 	}
 
 	~GameObject()
 	{
-		MainGameLoop.UpdateEvent -= (s, d) => _Update(d); 
+		MainGameLoop.Update -= (s, d) => _Update(d); 
 	}
 
 	public void Draw(nint renderer)

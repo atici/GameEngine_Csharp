@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Numerics;
-using System.Security.Cryptography.X509Certificates;
 
 public class Grid<T> : IEnumerable<T>
 {
@@ -8,7 +7,6 @@ public class Grid<T> : IEnumerable<T>
 	int _height;
 	int _width;
 	public float CellSize {get; private set;}
-
 
 	public Vector2 OriginPosition = Vector2.Zero;
 
