@@ -27,8 +27,6 @@ internal static class Program
 
         SDL.SetRenderDrawColor(renderer, 255, 0, 0, 0);
 
-
-
         var loop = true;
         while (loop)
         {
@@ -45,8 +43,9 @@ internal static class Program
 			SDL.SetRenderDrawColor(renderer, 255, 0, 0, 255);
             SDL.RenderClear(renderer);
 
-			SDL.SetRenderDrawColor(renderer, 255, 255, 0, 255);
-			SDL.RenderFillRect(renderer, player.transform.FRect);
+			player.Draw(renderer);
+			// SDL.SetRenderDrawColor(renderer, 255, 255, 0, 255);
+			// SDL.RenderFillRect(renderer, player.transform.FRect);
 			SDL.RenderLine(renderer, 0, 0, 800, 600);
 
             SDL.RenderPresent(renderer);

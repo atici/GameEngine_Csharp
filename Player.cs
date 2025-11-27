@@ -4,13 +4,19 @@ using SDL3;
 public class Player : GameObject
 {
 	const float MOVE_SPEED = 30f;
-	internal override void Update(float delta)
+
+	internal override void _Init()
 	{
-		Console.WriteLine(delta);
-		HandleInput(delta);
+		color = new(200, 30, 100);
 	}
 
-	void HandleInput(float delta)
+	internal override void _Update(float delta)
+	{
+		Console.WriteLine(delta);
+		_HandleInput(delta);
+	}
+
+	void _HandleInput(float delta)
 	{
 		if (!Input.KeyboardEvent.Down) return;
 
