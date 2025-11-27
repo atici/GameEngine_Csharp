@@ -1,4 +1,3 @@
-using System.Runtime.InteropServices.Swift;
 using SDL3;
 
 public class GameObject : IDrawable
@@ -35,4 +34,6 @@ public class GameObject : IDrawable
 		SDL_e.SetRenderDrawColor(renderer, color);
 		SDL.RenderFillRect(renderer, transform.FRect);
 	}
+
+	public SDL.FRect GetFRect() => transform.FRect;
 }

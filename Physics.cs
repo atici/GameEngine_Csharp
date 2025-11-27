@@ -11,7 +11,6 @@ public static class PhysicsEvents
 public class Physics
 {
 	public static readonly Vector2 VECTOR_DOWN = new Vector2(0, 1);
-	public const float GRAVITY = 998f;
 
 	HashSet<GameObject> GOs = new();
 
@@ -21,9 +20,8 @@ public class Physics
 	}
 
 	void Update(float delta) {
-		Console.WriteLine($"Adding {GRAVITY * (1/delta)} per second.");
 		foreach ( GameObject go in GOs) {
-			go.transform.Position += VECTOR_DOWN * GRAVITY * delta ; 
+			go.transform.Position += VECTOR_DOWN * Constants.Units.GRAVITY * delta ; 
 		}
 	}
 

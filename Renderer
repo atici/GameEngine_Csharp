@@ -1,0 +1,12 @@
+public class Renderer
+{
+	nint renderer;
+	public Renderer(nint renderer) {
+		this.renderer = renderer;
+	}
+
+	public Renderer()
+	{
+
+	}
+}

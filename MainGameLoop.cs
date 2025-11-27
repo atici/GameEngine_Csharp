@@ -12,7 +12,7 @@ public class MainGameLoop
 	public void InvokeUpdate()
 	{
 		ulong currentTime = SDL.GetTicks();
-		delta = (currentTime - lastTime) * Constants.TO_SECONDS;
+		delta = (currentTime - lastTime) * Constants.Units.MILISECOND;
 
 		if (delta >= Constants.UPDATE_CLOCK)
 		{
