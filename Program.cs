@@ -23,7 +23,7 @@ internal static class Program
 /********************** Start Game *****************************/
 		MainGameLoop mainGameLoop = new();
 		Player player = new Player();
-		player.transform = new Transform(new Vector2(30, 100), new Vector2(20, 60));
+		player.transform = new Transform(new Vector2(30, 100), new Vector2(30, 60));
 
         SDL.SetRenderDrawColor(renderer, 255, 0, 0, 0);
 
@@ -32,11 +32,11 @@ internal static class Program
         {
             while (SDL.PollEvent(out var e))
             {
-                if ((SDL.EventType)e.Type == SDL.EventType.Quit)
+				Input._UpdateEvent(e);
+                if ((SDL.EventType)e.Type == SDL.EventType.Quit || Input.GetKeyDown(SDL.Keycode.Q))
                 {
                     loop = false;
                 }
-				Input._UpdateEvent(e);
             }
 			mainGameLoop.UpdateLoop();
 

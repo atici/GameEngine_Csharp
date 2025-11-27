@@ -14,8 +14,8 @@ public struct Transform
 		new SDL.FRect {
 			X = Position.X,
 			Y = Position.Y,
-			H = Size.X,
-			W = Size.Y
+			W = Size.X,
+			H = Size.Y
 		};
 
 	public Transform(Vector2 position, Vector2 size, float rotation = 0f)
