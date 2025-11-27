@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices.Swift;
 using SDL3;
 
 public class GameObject : IDrawable
@@ -12,13 +13,20 @@ public class GameObject : IDrawable
 
 	public GameObject()
 	{
-		MainGameLoop.Start += (s, e) => _Start(); 
+		MainGameLoop.Start += (s, e) => {
+			PhysicsEvents.RegisterGO(this);
+			_Start();
+			}; 
 		MainGameLoop.Update += (s, d) => _Update(d); 
 		_Init();
 	}
 
 	~GameObject()
 	{
+		MainGameLoop.Start -= (s, e) => {
+			PhysicsEvents.RegisterGO(this);
+			_Start();
+			}; 
 		MainGameLoop.Update -= (s, d) => _Update(d); 
 	}
 

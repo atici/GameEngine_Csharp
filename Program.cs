@@ -22,6 +22,7 @@ internal static class Program
         }
 /********************** Start Game *****************************/
 		MainGameLoop mainGameLoop = new();
+		Physics physics = new();
 		Player player = new Player();
 		player.transform = new Transform(new Vector2(30, 100), new Vector2(30, 60));
 
