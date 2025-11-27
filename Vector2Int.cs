@@ -178,7 +178,7 @@ public struct Vector2Int : IEquatable<Vector2Int>
 	}
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public override bool Equals(object other)
+	public override bool Equals(object ?other)
 	{
 		if (other is Vector2Int v)
 			return Equals(v);

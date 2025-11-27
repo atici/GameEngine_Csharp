@@ -1,4 +1,5 @@
-﻿using System.Security.Cryptography.X509Certificates;
+﻿using System.Numerics;
+using System.Security.Cryptography.X509Certificates;
 using SDL3;
 
 namespace Create_Window;
@@ -19,20 +20,16 @@ internal static class Program
             SDL.LogError(SDL.LogCategory.Application, $"Error creating window and rendering: {SDL.GetError()}");
             return;
         }
+/********************** Start Game *****************************/
+		MainGameLoop mainGameLoop = new();
+		Player player = new Player();
+		player.transform = new Transform(new Vector2(30, 100), new Vector2(20, 60));
 
         SDL.SetRenderDrawColor(renderer, 255, 0, 0, 0);
 
+
+
         var loop = true;
-
-
-		SDL.FRect rectangle = new SDL.FRect{
-			X = 100,
-			Y = 100,
-			W = 50,
-			H = 50
-		};
-		RenderObj rect = new RenderObj(rectangle);
-		InputHandler inputHandler = new(rect);
         while (loop)
         {
             while (SDL.PollEvent(out var e))
@@ -41,14 +38,15 @@ internal static class Program
                 {
                     loop = false;
                 }
-				inputHandler.Handle(e);
+				Input._UpdateEvent(e);
             }
+			mainGameLoop.UpdateLoop();
 
 			SDL.SetRenderDrawColor(renderer, 255, 0, 0, 255);
             SDL.RenderClear(renderer);
 
 			SDL.SetRenderDrawColor(renderer, 255, 255, 0, 255);
-			SDL.RenderFillRect(renderer, rect.rect);
+			SDL.RenderFillRect(renderer, player.transform.FRect);
 			SDL.RenderLine(renderer, 0, 0, 800, 600);
 
             SDL.RenderPresent(renderer);
