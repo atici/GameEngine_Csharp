@@ -4,7 +4,7 @@ public class GameObject : IDrawable
 {
 	public string name = "Gameobject";
 	public Transform transform = new();
-	public Color color = new();
+	public Color color = new(0, 0, 255, 255);
 
 	internal virtual void _Update(float delta){}
 	internal virtual void _Init(){}

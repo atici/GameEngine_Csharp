@@ -12,7 +12,7 @@ public class Player : GameObject
 
 	internal override void _Update(float delta)
 	{
-		Console.WriteLine(delta);
+		// Console.WriteLine(delta);
 		_HandleInput(delta);
 	}
 
