@@ -1,12 +1,12 @@
 using SDL3;
 
 namespace Engine;
-public class GameObject : IDrawable
+public class GameObject
 {
 	public string name = "Gameobject";
 	public Transform transform = new();
-	public Color color = new(255, 255, 255, 255);
-	public bool Visible = true;
+
+	public HashSet<GoComponent> components = new();
 
 	internal virtual void _Init(){}
 	internal virtual void _Start(){}
@@ -15,7 +15,6 @@ public class GameObject : IDrawable
 	public GameObject()
 	{
 		MainGameLoop.Start += (s, e) => {
-			Registrar.RegisterDrawable(this);
 			Registrar.RegisterGO(this);
 			_Start();
 			}; 
@@ -26,19 +25,14 @@ public class GameObject : IDrawable
 	~GameObject()
 	{
 		MainGameLoop.Start -= (s, e) => {
-			Registrar.RegisterDrawable(this);
 			Registrar.RegisterGO(this);
 			_Start();
 			}; 
 		MainGameLoop.Update -= (s, d) => _Update(d); 
 	}
 
-	public virtual bool Draw(nint canvas)
+	public GoComponent? GetComponent<TComponent>()
 	{
-		if(!Visible) return true;
-		SDL_e.SetRenderDrawColor(canvas, color);
-		return SDL.RenderFillRect(canvas, GetFRect());
+		return components.FirstOrDefault((c) => c.GetType() is TComponent);
 	}
-
-	public SDL.FRect GetFRect() => transform.FRect;
 }

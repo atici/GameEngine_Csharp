@@ -6,8 +6,10 @@ public static class Registrar
 	public static event EventHandler<GameObject> ?RegisterGOListener;
 	public static void RegisterGO(GameObject go) => RegisterGOListener?.Invoke(null, go);
 
-	public static event EventHandler<IDrawable> ?RegisterDrawableListener ;
+	public static event EventHandler<IDrawable> ?RegisterDrawableListener;
 	public static void RegisterDrawable(IDrawable d) => RegisterDrawableListener?.Invoke(null, d);
+	public static event EventHandler<IDrawable> ?DeRegisterDrawableListener;
+	public static void DeRegisterDrawable(IDrawable d) => DeRegisterDrawableListener?.Invoke(null, d);
 }
 
 public class Physics

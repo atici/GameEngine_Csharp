@@ -2,6 +2,7 @@ using System.Collections;
 using System.Numerics;
 using SDL3;
 using Engine;
+using System.Security.Cryptography.X509Certificates;
 
 namespace FirstGame;
 public class Grid<T> : IEnumerable<T>, IDrawable
@@ -36,13 +37,17 @@ public class Grid<T> : IEnumerable<T>, IDrawable
 	{
 		int size = _height * _width;
 		SDL.FRect[] fRectArray = new SDL.FRect[size];
+
 		int i = 0;
-		foreach(T item in this)
+		for (int x = 0; x < _height; x++)
 		{
-			fRectArray[i] = item.GetFRect();
-			i++;
+			for (int y = 0; y < _width; y++)
+			{
+				fRectArray[ i++ ] = new SDL.FRect{ X = (x*CellSize) + OriginPosition.X, Y = (y * CellSize) + OriginPosition.Y, H = CellSize, W = CellSize };
+			}	
 		}
 		SDL_e.SetRenderDrawColor(canvas, Color);
+		// return SDL.RenderLines(canvas, fPoints.ToArray(), fPoints.Count);
 		return SDL.RenderRects(canvas, fRectArray, size);
 	}
 
@@ -82,7 +87,6 @@ public struct GridItem<T> : IDrawable
 		Y = y;
 	}
 
-	public SDL.FRect GetFRect() => Value == null ? new() : Value.GetFRect();
 	public bool Draw(nint canvas)
 	{
 		if (Value is IDrawable)

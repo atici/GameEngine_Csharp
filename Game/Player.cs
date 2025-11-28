@@ -8,7 +8,10 @@ public class Player : GameObject
 
 	internal override void _Init()
 	{
-		color = new(200, 30, 100);
+		Circle circle = new Circle(50, this);
+		circle.color = Color.Green;
+		// circle.fill = false;
+		components.Add(circle);
 	}
 
 	internal override void _Update(float delta)

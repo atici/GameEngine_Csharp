@@ -1,44 +1,23 @@
 using System.Numerics;
-using System.Security.Cryptography;
-using System.Security.Cryptography.X509Certificates;
-using SDL3;
 
 namespace Engine;
 public struct Transform
 {
 	public Vector2 Position;
 	public float Rotation;
-	public Vector2 Size;
 
 	public bool is_static = false;
 	// Matrix3x2 translateToLocal => Matrix3x2.CreateTranslation(Position);
-
-	public SDL.FRect FRect => 
-		new SDL.FRect {
-			X = Position.X,
-			Y = Position.Y,
-			W = Size.X,
-			H = Size.Y
-		};
-
-	public Transform(Vector2 position, Vector2 size, float rotation = 0f)
-	{
-		Position = position;
-		Rotation = rotation;
-		Size = size;
-	}
-
+	
 	public Transform(Vector2 position, float rotation = 0f)
 	{
 		Position = position;
 		Rotation = rotation;
-		Size = Vector2.Zero;
 	}
 
 	public Transform()
 	{
 		Position = Vector2.Zero;
-		Size = Vector2.Zero;
 		Rotation = 0f;
 	}
 }
@@ -57,4 +36,10 @@ public struct Color
 		B = b;
 		A = a;
 	}
+
+	public static Color White 	=> new Color(255,255,255,255);
+	public static Color Black 	=> new Color(0,0,0,255);
+	public static Color Red 	=> new Color(255,0,0,255);
+	public static Color Green	=> new Color(0,255,0,255);
+	public static Color Blue	=> new Color(0,255,0,255);
 }

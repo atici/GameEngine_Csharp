@@ -17,13 +17,8 @@ public class FirstGame : Engine.Game
 		Registrar.RegisterDrawable(engineGrid);
 
 		Player player = new Player();
-		player.transform = new Transform(new Vector2(30, 100), new Vector2(30, 60));
+		player.transform = new Transform(new Vector2(30, 100));
 		player.transform.is_static = true;
-
-		Circle circle = new Circle();
-		circle.transform.is_static = true;
-		circle.transform.Position = new Vector2(1000, 400);
-		circle.transform.Size.X = 300;
 	}
 }
 
