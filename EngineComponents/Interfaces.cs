@@ -1,7 +1,8 @@
 using SDL3;
 
+namespace Engine;
 public interface IDrawable
 {
 	public SDL.FRect GetFRect();
-	public void Draw(nint renderer);
+	public bool Draw(nint canvas);
 }

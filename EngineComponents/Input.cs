@@ -1,5 +1,6 @@
 using SDL3;
 
+namespace Engine;
 public static class Input
 {
 	public static SDL.Event Event {get; private set;} 

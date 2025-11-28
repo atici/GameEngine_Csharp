@@ -1,5 +1,6 @@
 using SDL3;
 
+namespace Engine;
 public class MainGameLoop
 {
 	public static event EventHandler<float> ?Update;
@@ -12,7 +13,7 @@ public class MainGameLoop
 	public void InvokeUpdate()
 	{
 		ulong currentTime = SDL.GetTicks();
-		delta = (currentTime - lastTime) * Constants.Units.MILISECOND;
+		delta = (currentTime - lastTime) * 0.001f; // Turn to milisecond.
 
 		if (delta >= Constants.UPDATE_CLOCK)
 		{

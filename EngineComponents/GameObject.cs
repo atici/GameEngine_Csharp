@@ -1,10 +1,12 @@
 using SDL3;
 
+namespace Engine;
 public class GameObject : IDrawable
 {
 	public string name = "Gameobject";
 	public Transform transform = new();
-	public Color color = new(0, 0, 255, 255);
+	public Color color = new(255, 255, 255, 255);
+	public bool Visible = true;
 
 	internal virtual void _Init(){}
 	internal virtual void _Start(){}
@@ -13,7 +15,8 @@ public class GameObject : IDrawable
 	public GameObject()
 	{
 		MainGameLoop.Start += (s, e) => {
-			PhysicsEvents.RegisterGO(this);
+			Registrar.RegisterDrawable(this);
+			Registrar.RegisterGO(this);
 			_Start();
 			}; 
 		MainGameLoop.Update += (s, d) => _Update(d); 
@@ -23,16 +26,21 @@ public class GameObject : IDrawable
 	~GameObject()
 	{
 		MainGameLoop.Start -= (s, e) => {
-			PhysicsEvents.RegisterGO(this);
+			Registrar.RegisterDrawable(this);
+			Registrar.RegisterGO(this);
 			_Start();
 			}; 
 		MainGameLoop.Update -= (s, d) => _Update(d); 
 	}
 
-	public void Draw(nint renderer)
+	public bool Draw(nint canvas)
 	{
-		SDL_e.SetRenderDrawColor(renderer, color);
-		SDL.RenderFillRect(renderer, transform.FRect);
+		if(!Visible) return true;
+		SDL_e.SetRenderDrawColor(canvas, color);
+		return 
+			// SDL.RenderRect(canvas, transform.FRect) 
+			// && 
+			SDL.RenderFillRect(canvas, GetFRect());
 	}
 
 	public SDL.FRect GetFRect() => transform.FRect;

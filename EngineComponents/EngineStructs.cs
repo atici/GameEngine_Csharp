@@ -1,6 +1,7 @@
 using System.Numerics;
 using SDL3;
 
+namespace Engine;
 public struct Transform
 {
 	public Vector2 Position;
@@ -39,6 +40,7 @@ public struct Transform
 		Rotation = 0f;
 	}
 }
+
 public struct Color
 {
 	public byte R = 0;
