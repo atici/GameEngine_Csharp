@@ -2,12 +2,12 @@
 using SDL3;
 using Engine;
 
-namespace Create_Window;
+namespace Engine;
 
-internal static class Program
+public static class Engine
 {
     [STAThread]
-    private static void Main()
+    public static void Start(Game game)
     {
         if (!SDL.Init(SDL.InitFlags.Video))
         {
@@ -26,19 +26,7 @@ internal static class Program
 		Physics physics = new();
 		Renderer renderer = new Renderer(canvas);
 
-		// Grid 
-		float gridCellSize = Physics.Units.METRE ;
-		Grid<GridItem> engineGrid = new(
-			(int)MathF.Ceiling(Constants.WINDOW_SIZE_WIDTH / gridCellSize)
-			,(int)MathF.Ceiling(Constants.WINDOW_SIZE_HEIGHT / gridCellSize)
-			,gridCellSize
-			,(g,x,y) => new GridItem(ref g, x, y));
-		engineGrid.Color = new(60,60,60);
-		Registrar.RegisterDrawable(engineGrid);
-
-		Player player = new Player();
-		player.transform = new Transform(new Vector2(30, 100), new Vector2(30, 60));
-		player.transform.is_static = true;
+		game.Init();
 
 		mainGameLoop.InvokeStart();
         var loop = true;

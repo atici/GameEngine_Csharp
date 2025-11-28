@@ -2,9 +2,10 @@ using System.Numerics;
 using SDL3;
 using Engine;
 
+namespace FirstGame;
 public class Player : GameObject
 {
-	const float MOVE_SPEED = 30f;
+	const float MOVE_SPEED = 1000f;
 
 	internal override void _Init()
 	{
