@@ -37,10 +37,7 @@ public class GameObject : IDrawable
 	{
 		if(!Visible) return true;
 		SDL_e.SetRenderDrawColor(canvas, color);
-		return 
-			// SDL.RenderRect(canvas, transform.FRect) 
-			// && 
-			SDL.RenderFillRect(canvas, GetFRect());
+		return SDL.RenderFillRect(canvas, GetFRect());
 	}
 
 	public SDL.FRect GetFRect() => transform.FRect;

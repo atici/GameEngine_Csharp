@@ -15,10 +15,10 @@ public class MainGameLoop
 		ulong currentTime = SDL.GetTicks();
 		delta = (currentTime - lastTime) * 0.001f; // Turn to milisecond.
 
-		if (delta >= Constants.UPDATE_CLOCK)
-		{
+		// if (delta >= Constants.UPDATE_CLOCK)
+		// {
 			Update?.Invoke(this, delta);
 			lastTime = currentTime;
-		}
+		// }
 	}
 }
