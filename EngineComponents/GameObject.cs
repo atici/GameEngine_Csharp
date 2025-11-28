@@ -33,7 +33,7 @@ public class GameObject : IDrawable
 		MainGameLoop.Update -= (s, d) => _Update(d); 
 	}
 
-	public bool Draw(nint canvas)
+	public virtual bool Draw(nint canvas)
 	{
 		if(!Visible) return true;
 		SDL_e.SetRenderDrawColor(canvas, color);

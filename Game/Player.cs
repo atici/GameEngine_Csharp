@@ -1,5 +1,4 @@
-using System.Numerics;
-using SDL3;
+using System.Numerics; using SDL3;
 using Engine;
 
 namespace FirstGame;
