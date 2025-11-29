@@ -29,15 +29,20 @@ public class Renderer
 
 	public void SetCanvas(nint canvas) => this.canvas = canvas;
 
-	void _Register(ref IDrawable drawable) {
+	void _Register(IDrawable drawable) {
 		if (drawables.Contains(drawable)) return;
 		drawables.Add(drawable);
 	}
+	void _DeRegister(IDrawable drawable) {
+		drawables.Remove(drawable);
+	}
 	public Renderer(nint canvas) {
-		Registrar.RegisterDrawableListener += (s, d) => _Register(ref d);
+		Registrar.RegisterDrawableListener += (s, d) => _Register(d);
+		Registrar.DeRegisterDrawableListener += (s, d) => _DeRegister(d);
 		this.canvas = canvas;
 	}
 	~Renderer() {
-		Registrar.RegisterDrawableListener -= (s, d) => _Register(ref d);
+		Registrar.RegisterDrawableListener -= (s, d) => _Register(d);
+		Registrar.DeRegisterDrawableListener += (s, d) => _DeRegister(d);
 	}
 }

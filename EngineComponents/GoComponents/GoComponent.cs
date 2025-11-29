@@ -2,16 +2,14 @@ namespace Engine;
 public abstract class GoComponent
 {
 	public bool enabled = true;
-	public GameObject ?gameObject;
+	public GameObject ?gameObject {get; protected set;}
 	public Transform transform => gameObject == null ? default! : gameObject.transform;
 
-	public GoComponent(GameObject gameObject)
-	{
-		System.Diagnostics.Debug.Assert(gameObject != null);
+	internal virtual void AddToGameobject(GameObject gameObject) {
 		this.gameObject = gameObject;
-	}
+	} 
 
 	public virtual void Destroy() {
-		gameObject?.components.Remove(this);
+		gameObject = null;
 	}
 }

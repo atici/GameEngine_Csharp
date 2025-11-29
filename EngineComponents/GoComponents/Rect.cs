@@ -14,7 +14,7 @@ public class Rect : DrawableComponent
 		H=height
 	};
 
-	public Rect(float width, float height, GameObject gameObject) : base(gameObject) {
+	public Rect(float width, float height) {
 		this.width = width;
 		this.height = height;
 	}

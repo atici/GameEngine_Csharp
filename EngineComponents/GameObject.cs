@@ -1,6 +1,3 @@
-using System.Diagnostics;
-using SDL3;
-
 namespace Engine;
 public class GameObject
 {
@@ -14,20 +11,20 @@ public class GameObject
 	internal virtual void _Update(float delta){}
 
 	public GameObject() {
-		MainGameLoop.Start += (s, e) => {
+		GameClock.Start += (s, e) => {
 			Registrar.RegisterGO(this);
 			_Start();
 			}; 
-		MainGameLoop.Update += (s, d) => _Update(d); 
+		GameClock.Update += (s, d) => _Update(d); 
 		_Init();
 	}
 
 	~GameObject() {
-		MainGameLoop.Start -= (s, e) => {
+		GameClock.Start -= (s, e) => {
 			Registrar.RegisterGO(this);
 			_Start();
 			}; 
-		MainGameLoop.Update -= (s, d) => _Update(d); 
+		GameClock.Update -= (s, d) => _Update(d); 
 	}
 
 	public TComponent? GetComponent<TComponent>(TComponent type) where TComponent : GoComponent {
@@ -36,6 +33,11 @@ public class GameObject
 	public TComponent AddComponent<TComponent>(TComponent component) where TComponent : GoComponent {
 		// Debug.Assert(component != null);
 		components.Add(component);
+		component.AddToGameobject(this);
 		return component;
+	}
+	public bool RemoveComponent<TComponent>(TComponent component) where TComponent : GoComponent {
+		component.Destroy();
+		return components.Remove(component);
 	}
 }

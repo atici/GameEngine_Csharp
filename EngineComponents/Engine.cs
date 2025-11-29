@@ -1,10 +1,10 @@
 ﻿using SDL3;
 
 namespace Engine;
-
 public class Engine
 {
-	public MainGameLoop mainGameLoop {get; protected set;} = new MainGameLoop();
+	public EngineOptions options = new EngineOptions(); 
+	public GameClock clock {get; protected set;} = new GameClock();
 	public Physics physics {get; protected set;} = new Physics();
 	public Renderer renderer {get; protected set;} = new Renderer(0);
 	
@@ -15,7 +15,7 @@ public class Engine
             return;
         }
 
-        if (!SDL.CreateWindowAndRenderer("Game Engine v0.1", Constants.WINDOW_SIZE_WIDTH, Constants.WINDOW_SIZE_HEIGHT, 0, out var window, out var canvas)) {
+        if (!SDL.CreateWindowAndRenderer(options.window_name, options.window_width, options.window_height, 0, out var window, out var canvas)) {
             SDL.LogError(SDL.LogCategory.Application, $"Error creating window and rendering: {SDL.GetError()}");
             return;
         }
@@ -24,7 +24,7 @@ public class Engine
 /********************** Start Game *****************************/
 		game.Init();
 
-		mainGameLoop.InvokeStart();
+		clock.InvokeStart();
         var loop = true;
         while (loop)
         {
@@ -36,7 +36,7 @@ public class Engine
                     loop = false;
                 }
             }
-			mainGameLoop.InvokeUpdate();
+			clock.InvokeUpdate();
 			renderer.Render();
         }
 
@@ -45,4 +45,10 @@ public class Engine
 
         SDL.Quit();
     }
+}
+
+public class EngineOptions {
+	public string window_name = "Game_Engine_v0.2";
+	public int window_width =  Constants.WINDOW_SIZE_WIDTH;
+	public int window_height =  Constants.WINDOW_SIZE_HEIGHT;
 }

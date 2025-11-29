@@ -1,10 +1,13 @@
+using System.Runtime.CompilerServices;
+
 namespace Engine;
 public abstract class DrawableComponent : GoComponent, IDrawable
 {
 	public Color color = Color.White;
 
-	public DrawableComponent(GameObject gameObject) : base(gameObject) {
+	internal override void AddToGameobject(GameObject gameObject){
 		Registrar.RegisterDrawable(this);
+		base.AddToGameobject(gameObject);
 	}
 
 	public override void Destroy() {

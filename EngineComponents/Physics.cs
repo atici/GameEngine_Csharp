@@ -37,11 +37,11 @@ public class Physics
 	}
 
 	public Physics() {
-		MainGameLoop.Update += (s, d) => Update(d);
+		GameClock.Update += (s, d) => Update(d);
 		Registrar.RegisterGOListener += (s, g) => _Register(g);
 	}
 	~Physics() {
-		MainGameLoop.Update -= (s, d) => Update(d);
+		GameClock.Update -= (s, d) => Update(d);
 		Registrar.RegisterGOListener -= (s, t) => _Register(t);
 	}
 }
