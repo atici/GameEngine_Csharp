@@ -55,8 +55,8 @@ public class GameObject
 		internal_RemoveAllComponents();
 	}
 
-	public TComponent? GetComponent<TComponent>(TComponent type) where TComponent : GoComponent {
-		return components.FirstOrDefault((c) => c.GetType() == type.GetType()) as TComponent;
+	public TComponent? GetComponent<TComponent>() where TComponent : GoComponent {
+		return components.FirstOrDefault((c) => c is TComponent) as TComponent;
 	}
 	public TComponent AddComponent<TComponent>(TComponent component) where TComponent : GoComponent {
 		// Debug.Assert(component != null);

@@ -4,7 +4,7 @@ using Engine;
 namespace Snake;
 public class Section : GameObject{
 
-	public enum State{Empty = 0, Body = 1, Head = 3, Food = 2}
+	public enum State{Empty = 0, Body = 1, Head = 3, Food = 2, Dead = 4}
 	private State _state = 0;
 	public State state {
 		get => _state;
@@ -21,6 +21,9 @@ public class Section : GameObject{
 				break;
 				case State.Food:
 					rect.color = Color.Red;
+				break;
+				case State.Dead:
+					// rect.color = new Color(128, 0, 128);
 				break;
 			}
 			_state = value;

@@ -1,11 +1,9 @@
 // Note: might not work on later iterations of the engine.
 using System.Numerics;
 using Engine;
-using Microsoft.VisualBasic;
 using SDL3;
 
 namespace Snake;
-
 public class Snake : Game {
 	GameObject ?main;
 
@@ -13,7 +11,6 @@ public class Snake : Game {
 		_Engine.physics.enabled = false; // We dont want any physics going on in this game.
 
 		main = new MainLoop(_Engine.options);
-		
 	}
 
 	public override void StartEngine() {
@@ -25,50 +22,66 @@ public class Snake : Game {
 public class MainLoop : GameObject {
 	const int HEIGHT = 16;
 	const int WIDTH = 16;
-	const float CELL_SIZE = 30f;
+	const float CELL_SIZE = 50f;
 	const int SNAKE_START_SIZE = 4;
+
+	bool isDead = false;
+	float gameSpeed = 0.5f; // Smaller the faster.
+	Vector2 currentDirection = Physics.Vector2_Right;
+	Vector2 lastDirection = Physics.Vector2_Right;
+
 	EngineOptions engineOptions;
 	Grid<Section> grid; 
 	Queue<Section> snake;
-
 	Section head;
+
+	float deltaTime = 0f;
+	protected override void Update(float delta) {
+		deltaTime += delta;
+		_HandleInput(delta);
+
+		if (isDead) return;
+		if (deltaTime < gameSpeed) return;
+		deltaTime = 0f;
+		MoveSnake(currentDirection);
+		lastDirection = currentDirection;
+	}
 
 	public MainLoop(EngineOptions options) {
 		engineOptions = options;	
+		isDead = false;
 
 		snake = new Queue<Section>();
 		grid = CreateGrid();
 		CreateAndSetSnake(SNAKE_START_SIZE, out head);
 	}
 
-	protected override void Update(float delta) {
-		_HandleInput(delta);
-	}
-
-	void CreateAndSetSnake(int startingSections, out Section _head) {
-		Vector2 nextPos = new Vector2(
-			(int)(HEIGHT * 0.5f - MathF.Ceiling(startingSections*0.5f)),
-			(int)(WIDTH * 0.5f));
-		_head = grid.GetValue(nextPos);
-		snake.Enqueue(_head);
-		for (int i = 1; i < startingSections; i++) {
-			nextPos.X++;
-			MoveHead(nextPos);
+	void Die() {
+		isDead = true;
+		foreach(Section s in snake) {
+			Color color = new Color(
+				Engine.Random.Range(128, 255)
+				,Engine.Random.Range(0, 192)
+				,Engine.Random.Range(64, 255));
+			Rect ?rect = s.GetComponent<Rect>();
+			if(rect != null)
+				rect.color = color;	
+			s.state = Section.State.Dead;
 		}
 	}
-	Grid<Section> CreateGrid() {
-		Vector2 gridOffset = new Vector2(WIDTH * CELL_SIZE * 0.5f, HEIGHT * CELL_SIZE * 0.5f);
-		Vector2 gridOriginPosition = new Vector2(engineOptions.window_width, engineOptions.window_height) * 0.5f - gridOffset;
-		return new Grid<Section>(WIDTH, HEIGHT, CELL_SIZE, gridOriginPosition, (g, x, y) => new Section(x, y, g));
+
+	void PlaceFood() {
+
 	}
 
 	void MoveSnake(Vector2 pos) {
 		if (head == null) return;
+		pos += head.gridPos;
 		if (pos.X >= grid.width 
 			|| pos.Y >= grid.height
 			|| pos.X < 0 
 			|| pos.Y < 0) {
-			//  Dead Snake
+			Die();
 			return;
 		}
 		Section nextSection = grid.GetValue(pos);
@@ -79,7 +92,7 @@ public class MainLoop : GameObject {
 				snake.Dequeue().state = Section.State.Empty;
 				break;
 			case Section.State.Body:
-				// GameOver
+				Die();
 				break;
 			case Section.State.Food:
 				MoveHead(nextSection);
@@ -96,32 +109,52 @@ public class MainLoop : GameObject {
 		head = next;
 	}
 
-	float deltaTime = 0f;
+	float inputDeltaTime = 0f;
 	void _HandleInput(float delta) {
-		deltaTime += delta;
+		inputDeltaTime += delta;
 		if (!Input.KeyboardEvent.Down) return;
-		if( deltaTime < 0.25f) {
+		if( inputDeltaTime < 0.25f) {
 			return;
 		}
-		deltaTime = 0f;
+		inputDeltaTime = 0f;
 
 		switch (Input.KeyboardEvent.Key)
 		{
 			case SDL.Keycode.Right:
-				MoveSnake(head.gridPos + Physics.Vector2_Right);
+				if(lastDirection == Physics.Vector2_Left) return;
+				currentDirection = Physics.Vector2_Right;
 				break;
 			case SDL.Keycode.Left:
-				MoveSnake(head.gridPos + Physics.Vector2_Left);
+				if(lastDirection == Physics.Vector2_Right) return;
+				currentDirection = Physics.Vector2_Left;
 				break;
 			case SDL.Keycode.Up:
-				MoveSnake(head.gridPos + Physics.Vector2_Up);
+				if(lastDirection == Physics.Vector2_Down) return;
+				currentDirection = Physics.Vector2_Up;
 				break;
 			case SDL.Keycode.Down:
-				MoveSnake(head.gridPos + Physics.Vector2_Down);
+				if(lastDirection == Physics.Vector2_Up) return;
+				currentDirection = Physics.Vector2_Down;
 				break;
 			case SDL.Keycode.R:
 			 	// Reset Logic
 				break;
 		}
+	}
+	void CreateAndSetSnake(int startingSections, out Section _head) {
+		Vector2 nextPos = new Vector2(
+			(int)(HEIGHT * 0.5f - MathF.Ceiling(startingSections*0.5f)),
+			(int)(WIDTH * 0.5f));
+		_head = grid.GetValue(nextPos);
+		snake.Enqueue(_head);
+		for (int i = 1; i < startingSections; i++) {
+			nextPos.X++;
+			MoveHead(nextPos);
+		}
+	}
+	Grid<Section> CreateGrid() {
+		Vector2 gridOffset = new Vector2(WIDTH * CELL_SIZE * 0.5f, HEIGHT * CELL_SIZE * 0.5f);
+		Vector2 gridOriginPosition = new Vector2(engineOptions.window_width, engineOptions.window_height) * 0.5f - gridOffset;
+		return new Grid<Section>(WIDTH, HEIGHT, CELL_SIZE, gridOriginPosition, (g, x, y) => new Section(x, y, g));
 	}
 }

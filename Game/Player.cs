@@ -47,7 +47,7 @@ public class Player : GameObject
 				transform.position += new Vector2(0,1) * delta * MOVE_SPEED;
 				break;
 			case SDL.Keycode.H:
-				if(rect != null && GetComponent(rect) != null) 
+				if(rect != null && GetComponent<Rect>() != null) 
 					RemoveComponent(rect);
 				break;
 			case SDL.Keycode.Y:
