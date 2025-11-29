@@ -21,8 +21,8 @@ public class FirstGame : Engine.Game
 		Registrar.RegisterDrawableInvoke(engineGrid);
 
 		Player player = new Player();
-		player.transform = new Transform(new Vector2(30, 100));
-		player.transform.is_static = true;
+		player.transform.position = new Vector2(30, 100);
+		// player.transform.is_static = true;
 	}
 
 	public override void StartEngine() {

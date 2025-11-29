@@ -25,7 +25,7 @@ public class GameObject
 
 	private void _Start() {
 		if (!enabled) return;
-		Registrar.RegisterPhysicsInvoke(this);
+		// Registrar.RegisterPhysicsInvoke(this);
 		Start();
 	}
 
