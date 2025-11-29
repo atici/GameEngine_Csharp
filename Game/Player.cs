@@ -60,6 +60,8 @@ public class Player : GameObject
 			case SDL.Keycode.R:
 				RemoveComponent(rect);
 				rect = new(50,50);
+				rect.color = new(Engine.Random.Range(0, 255),Engine.Random.Range(0, 255), Engine.Random.Range(0, 255));
+				AddComponent(rect);
 				break;
 		}
 	}

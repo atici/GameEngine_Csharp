@@ -29,6 +29,18 @@ public struct Color
 	public byte B = 0;
 	public byte A = 255;
 
+	public Color(float r, float g, float b, float a = 255) {
+		R = (byte)r;
+		G = (byte)g;
+		B = (byte)b;
+		A = (byte)a;
+	}
+	public Color(int r, int g, int b, int a = 255) {
+		R = (byte)r;
+		G = (byte)g;
+		B = (byte)b;
+		A = (byte)a;
+	}
 	public Color(byte r, byte g, byte b, byte a = 255)
 	{
 		R = r;

@@ -1,5 +1,3 @@
-using System.Runtime.CompilerServices;
-
 namespace Engine;
 public abstract class DrawableComponent : GoComponent, IDrawable
 {
