@@ -47,11 +47,8 @@ public class Player : GameObject
 					RemoveComponent(rect);
 				break;
 			case SDL.Keycode.Y:
-				if (rect != null) {
-					rect.AddToGameobject(this);
+				if (rect != null) 
 					AddComponent(rect);
-					Console.WriteLine($"Rect dimensions: {rect.width} : {rect.height}");
-				}
 				break;
 		}
 	}

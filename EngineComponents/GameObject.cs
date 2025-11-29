@@ -33,11 +33,13 @@ public class GameObject
 	public TComponent AddComponent<TComponent>(TComponent component) where TComponent : GoComponent {
 		// Debug.Assert(component != null);
 		components.Add(component);
-		component.AddToGameobject(this);
+		component.internal_AddToGO(this);
 		return component;
 	}
 	public bool RemoveComponent<TComponent>(TComponent component) where TComponent : GoComponent {
-		component.Destroy();
-		return components.Remove(component);
+		bool result = components.Remove(component);
+		if(!result) return false;
+		component.internal_Remove();
+		return result;
 	}
 }

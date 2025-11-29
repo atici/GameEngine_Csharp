@@ -2,7 +2,6 @@ using System.Collections;
 using System.Numerics;
 using SDL3;
 using Engine;
-using System.Security.Cryptography.X509Certificates;
 
 namespace FirstGame;
 public class Grid<T> : IEnumerable<T>, IDrawable
