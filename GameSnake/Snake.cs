@@ -54,6 +54,7 @@ public class MainLoop : GameObject {
 		snake = new Queue<Section>();
 		grid = CreateGrid();
 		CreateAndSetSnake(SNAKE_START_SIZE, out head);
+		PlaceFood();
 	}
 
 	void Die() {
@@ -71,7 +72,15 @@ public class MainLoop : GameObject {
 	}
 
 	void PlaceFood() {
-
+		List<Section> emptySections = new();
+		foreach(Section s in grid)
+			if(s.state == Section.State.Empty) emptySections.Add(s);
+		int numEmpty= emptySections.Count;
+		if(numEmpty == 0) {
+			Die(); // I dont have anything else for now.  Console.WriteLine("You won!!!");
+			return;	
+		}
+		emptySections[Engine.Random.Range(0, numEmpty)].state = Section.State.Food;
 	}
 
 	void MoveSnake(Vector2 pos) {
@@ -96,6 +105,7 @@ public class MainLoop : GameObject {
 				break;
 			case Section.State.Food:
 				MoveHead(nextSection);
+				PlaceFood();
 				break;
 		}
 	}
