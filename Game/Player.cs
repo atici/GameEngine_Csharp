@@ -9,10 +9,10 @@ public class Player : GameObject
 	internal override void _Init()
 	{
 		name = "Player";
-		// Circle circle = new Circle(50, this);
-		// circle.color = Color.Green;
-		// // circle.fill = false;
-		// components.Add(circle);
+		Circle circle = new Circle(50, this);
+		circle.color = Color.Green;
+		circle.fill = false;
+		AddComponent(circle);
 
 		Rect rect = new Rect(30, 50, this);
 		rect.color = Color.Blue;

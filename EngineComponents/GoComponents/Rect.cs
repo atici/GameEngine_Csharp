@@ -8,8 +8,8 @@ public class Rect : DrawableComponent
 	public bool fill = true;
 
 	public SDL.FRect FRect => new SDL.FRect{
-		X= transform.Position.X, 
-		Y=transform.Position.Y,
+		X= transform.Position.X - width*0.5f, 
+		Y=transform.Position.Y - height*0.5f,
 		W= width,
 		H=height
 	};
