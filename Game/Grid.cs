@@ -3,7 +3,7 @@ using System.Numerics;
 using SDL3;
 using Engine;
 
-namespace FirstGame;
+namespace Extensions;
 public class Grid<T> : IEnumerable<T>, IDrawable
 	where T : IDrawable
 {
