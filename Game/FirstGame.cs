@@ -34,13 +34,3 @@ public class FirstGame : Engine.Game
 		base.StartEngine();
 	}
 }
-
-/****** Run the Engine and feet the game class. ******/
-internal static class Program
-{
-	public static void Main() {
-		Console.WriteLine("Starting");
-		FirstGame game = new FirstGame();
-		game.StartEngine();
-	}
-}
