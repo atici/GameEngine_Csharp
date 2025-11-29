@@ -4,19 +4,24 @@ using Engine;
 namespace FirstGame;
 public class Player : GameObject
 {
-	const float MOVE_SPEED = 1000f;
+	const float MOVE_SPEED = 500f;
 
 	internal override void _Init()
 	{
-		Circle circle = new Circle(50, this);
-		circle.color = Color.Green;
-		// circle.fill = false;
-		components.Add(circle);
+		name = "Player";
+		// Circle circle = new Circle(50, this);
+		// circle.color = Color.Green;
+		// // circle.fill = false;
+		// components.Add(circle);
+
+		Rect rect = new Rect(30, 50, this);
+		rect.color = Color.Blue;
+		rect.fill = true;
+		AddComponent(rect);
 	}
 
 	internal override void _Update(float delta)
 	{
-		// Console.WriteLine(delta);
 		_HandleInput(delta);
 	}
 

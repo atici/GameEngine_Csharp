@@ -12,8 +12,7 @@ public class GameObject
 	internal virtual void _Start(){}
 	internal virtual void _Update(float delta){}
 
-	public GameObject()
-	{
+	public GameObject() {
 		MainGameLoop.Start += (s, e) => {
 			Registrar.RegisterGO(this);
 			_Start();
@@ -22,8 +21,7 @@ public class GameObject
 		_Init();
 	}
 
-	~GameObject()
-	{
+	~GameObject() {
 		MainGameLoop.Start -= (s, e) => {
 			Registrar.RegisterGO(this);
 			_Start();
@@ -31,8 +29,11 @@ public class GameObject
 		MainGameLoop.Update -= (s, d) => _Update(d); 
 	}
 
-	public GoComponent? GetComponent<TComponent>()
-	{
+	public GoComponent? GetComponent<TComponent>() where TComponent : GoComponent {
 		return components.FirstOrDefault((c) => c.GetType() is TComponent);
+	}
+	public GoComponent? AddComponent<TComponent>(TComponent component) where TComponent : GoComponent {
+		components.Add(component);
+		return component;
 	}
 }
