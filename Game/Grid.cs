@@ -2,6 +2,7 @@ using System.Collections;
 using System.Numerics;
 using SDL3;
 using Engine;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Extensions;
 public class Grid<T> : IEnumerable<T>, IDrawable
@@ -30,7 +31,8 @@ public class Grid<T> : IEnumerable<T>, IDrawable
 		}
 	}
 
-	public T GetValue(int x, int y) => _values == null ? default! : _values[x,y];
+	public T GetValue(Vector2 pos) => GetValue((int)pos.X, (int)pos.Y);
+	public T GetValue(int x, int y) => _values[x,y] ?? default!; // == null ? default! : _values[x,y];
 
 	public bool Draw(nint canvas)
 	{

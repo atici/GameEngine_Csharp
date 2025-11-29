@@ -28,6 +28,7 @@ public class Section : GameObject{
 	}
 
 	private Rect rect;
+	public Vector2 gridPos;
 
 	public Section(int x, int y, Grid<Section> g) {
 		float size = g.cellSize;
@@ -35,6 +36,7 @@ public class Section : GameObject{
 		rect = new Rect(size - 2f, size - 2f);
 		AddComponent(rect);
 		state = State.Empty;
+		gridPos = new Vector2(x,y);
 	}
 
 	protected override void Init() {
