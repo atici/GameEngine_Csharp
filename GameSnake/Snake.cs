@@ -5,17 +5,36 @@ using SDL3;
 
 namespace Snake;
 public class Snake : Game {
-	GameObject ?main;
+	GameObject ?gameStarter;
+	public static EngineOptions engineOptions = new(); 
 
 	public override void Init() {
+		engineOptions = _Engine.options;
 		_Engine.physics.enabled = false; // We dont want any physics going on in this game.
-
-		main = new MainLoop(_Engine.options);
+		gameStarter = new GameStarter();	
+		// main = new MainLoop();
 	}
 
 	public override void StartEngine() {
 		_Engine.options.window_name = "Snake v1.0";
 		base.StartEngine();
+	}
+}
+
+public class GameStarter : GameObject {
+	GameObject main = new();
+	protected override void Start() {
+		main.Destroy();
+		main = new MainLoop();
+	}
+
+	float inputDeltaTime = 0f;
+	protected override void Update(float delta) {
+		inputDeltaTime += delta;
+		if( inputDeltaTime < 0.1f) return;
+		inputDeltaTime = 0;	
+		if (Input.GetKeyDown(SDL.Keycode.R))
+			Start();
 	}
 }
 
@@ -25,12 +44,20 @@ public class MainLoop : GameObject {
 	const float CELL_SIZE = 50f;
 	const int SNAKE_START_SIZE = 4;
 
+	int _score = 0;
+	int score {
+		get => _score;
+		set {
+			// Update score related stuff.
+			// Console.WriteLine(value);
+			_score = value;
+		}
+	}
 	bool isDead = false;
-	float gameSpeed = 0.5f; // Smaller the faster.
+	float gameSpeed = 0.3f; // Smaller the faster.
 	Vector2 currentDirection = Physics.Vector2_Right;
 	Vector2 lastDirection = Physics.Vector2_Right;
 
-	EngineOptions engineOptions;
 	Grid<Section> grid; 
 	Queue<Section> snake;
 	Section head;
@@ -38,7 +65,7 @@ public class MainLoop : GameObject {
 	float deltaTime = 0f;
 	protected override void Update(float delta) {
 		deltaTime += delta;
-		_HandleInput(delta);
+		HandleInput(delta);
 
 		if (isDead) return;
 		if (deltaTime < gameSpeed) return;
@@ -47,10 +74,7 @@ public class MainLoop : GameObject {
 		lastDirection = currentDirection;
 	}
 
-	public MainLoop(EngineOptions options) {
-		engineOptions = options;	
-		isDead = false;
-
+	public MainLoop() {
 		snake = new Queue<Section>();
 		grid = CreateGrid();
 		CreateAndSetSnake(SNAKE_START_SIZE, out head);
@@ -69,6 +93,7 @@ public class MainLoop : GameObject {
 				rect.color = color;	
 			s.state = Section.State.Dead;
 		}
+		Console.WriteLine("Game Over with a score of " + score);
 	}
 
 	void PlaceFood() {
@@ -104,6 +129,7 @@ public class MainLoop : GameObject {
 				Die();
 				break;
 			case Section.State.Food:
+				score++;
 				MoveHead(nextSection);
 				PlaceFood();
 				break;
@@ -120,10 +146,10 @@ public class MainLoop : GameObject {
 	}
 
 	float inputDeltaTime = 0f;
-	void _HandleInput(float delta) {
+	void HandleInput(float delta) {
 		inputDeltaTime += delta;
 		if (!Input.KeyboardEvent.Down) return;
-		if( inputDeltaTime < 0.25f) {
+		if( inputDeltaTime < 0.1f) {
 			return;
 		}
 		inputDeltaTime = 0f;
@@ -146,9 +172,6 @@ public class MainLoop : GameObject {
 				if(lastDirection == Physics.Vector2_Up) return;
 				currentDirection = Physics.Vector2_Down;
 				break;
-			case SDL.Keycode.R:
-			 	// Reset Logic
-				break;
 		}
 	}
 	void CreateAndSetSnake(int startingSections, out Section _head) {
@@ -164,7 +187,12 @@ public class MainLoop : GameObject {
 	}
 	Grid<Section> CreateGrid() {
 		Vector2 gridOffset = new Vector2(WIDTH * CELL_SIZE * 0.5f, HEIGHT * CELL_SIZE * 0.5f);
-		Vector2 gridOriginPosition = new Vector2(engineOptions.window_width, engineOptions.window_height) * 0.5f - gridOffset;
+		Vector2 gridOriginPosition = new Vector2(Snake.engineOptions.window_width, Snake.engineOptions.window_height) * 0.5f - gridOffset;
 		return new Grid<Section>(WIDTH, HEIGHT, CELL_SIZE, gridOriginPosition, (g, x, y) => new Section(x, y, g));
+	}
+
+	protected override void OnDestroy() {
+		foreach(Section s in grid)
+			s.Destroy();
 	}
 }
