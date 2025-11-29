@@ -1,29 +1,16 @@
 using SDL3;
 
 namespace Engine;
-public class Circle : GoComponent, IDrawable
+public class Circle : DrawableComponent
 {
 	public float radius;
-	public Color color = Color.White;
 	public bool fill = true;
 
-	public Circle(float radius, GameObject gameObject)
-	{
-		System.Diagnostics.Debug.Assert(gameObject != null);
+	public Circle(float radius, GameObject gameObject) : base(gameObject) {
 		this.radius = radius;
-		this.gameObject = gameObject;
-		
-		Registrar.RegisterDrawable(this);
 	}
 
-	public void Destroy()
-	{
-		gameObject?.components.Remove(this);
-		Registrar.DeRegisterDrawable(this);
-	}
-
-	public bool Draw(nint canvas)
-	{
+	public override bool Draw(nint canvas) {
 		if(!enabled) return false;
 		SDL_e.SetRenderDrawColor(canvas, color);
 		if (fill)
