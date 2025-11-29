@@ -1,17 +1,6 @@
 using System.Numerics;
 
 namespace Engine;
-public static class Registrar
-{
-	public static event EventHandler<GameObject> ?RegisterGOListener;
-	public static void RegisterGO(GameObject go) => RegisterGOListener?.Invoke(null, go);
-
-	public static event EventHandler<IDrawable> ?RegisterDrawableListener;
-	public static void RegisterDrawable(IDrawable d) => RegisterDrawableListener?.Invoke(null, d);
-	public static event EventHandler<IDrawable> ?DeRegisterDrawableListener;
-	public static void DeRegisterDrawable(IDrawable d) => DeRegisterDrawableListener?.Invoke(null, d);
-}
-
 public class Physics
 {
 	public static class Units
@@ -20,28 +9,38 @@ public class Physics
 		public const float MILISECOND = 0.001f;
 		public const float GRAVITY = 9.81f * METRE / 1; // metre/second == 100/1
 	}
-	public static readonly Vector2 VECTOR_DOWN = new Vector2(0, 1);
+	public static readonly Vector2 Vector2_Down 	= new Vector2(0, 1);
+	public static readonly Vector2 Vector2_Up 		= new Vector2(0, -1);
+	public static readonly Vector2 Vector2_Right 	= new Vector2(1, 0);
+	public static readonly Vector2 Vector2_Left		= new Vector2(-1, 0);
+	public bool enabled = true;
 
-	HashSet<GameObject> GOs = new();
-
-	void _Register(GameObject go) {
-		if (GOs.Contains(go)) return;
-		GOs.Add(go);
-	}
+// Subject to big changes over here.
+	HashSet<GameObject> GameObjects = new();
 
 	void Update(float delta) {
-		foreach ( GameObject go in GOs) {
-			if (go.transform.is_static) continue;
-			go.transform.Position += VECTOR_DOWN * Units.GRAVITY * delta ; 
+		if(!enabled) return;
+
+		foreach ( GameObject go in GameObjects) {
+			if (go.transform.is_static || !go.enabled) continue;
+			go.transform.position += Vector2_Up * Units.GRAVITY * delta ; 
 		}
 	}
 
 	public Physics() {
-		GameClock.Update += (s, d) => Update(d);
-		Registrar.RegisterGOListener += (s, g) => _Register(g);
+		GameClock.Update += Update;
+		Registrar.RegisterPhysics += _Register;
+		Registrar.DeRegisterPhysics += _DeRegister;
 	}
 	~Physics() {
-		GameClock.Update -= (s, d) => Update(d);
-		Registrar.RegisterGOListener -= (s, t) => _Register(t);
+		GameClock.Update -= Update;
+		Registrar.RegisterPhysics -= _Register;
+		Registrar.DeRegisterPhysics -= _DeRegister;
+	}
+	void _Register(GameObject go) {
+		GameObjects.Add(go);
+	}
+	void _DeRegister(GameObject go) {
+		GameObjects.Remove(go);
 	}
 }

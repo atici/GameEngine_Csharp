@@ -6,11 +6,11 @@ public abstract class DrawableComponent : GoComponent, IDrawable
 	public Color color = Color.White;
 
 	public override void OnAdd(){
-		Registrar.RegisterDrawable(this);
+		Registrar.RegisterDrawableInvoke(this);
 	}
 
 	public override void OnRemove() {
-		Registrar.DeRegisterDrawable(this);
+		Registrar.DeRegisterDrawableInvoke(this);
 	}
 
 	public abstract bool Draw(nint canvas);

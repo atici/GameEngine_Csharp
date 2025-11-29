@@ -3,22 +3,22 @@ using System.Numerics;
 namespace Engine;
 public struct Transform
 {
-	public Vector2 Position;
-	public float Rotation;
+	public Vector2 position;
+	public float rotation;
 
 	public bool is_static = false;
 	// Matrix3x2 translateToLocal => Matrix3x2.CreateTranslation(Position);
 	
 	public Transform(Vector2 position, float rotation = 0f)
 	{
-		Position = position;
-		Rotation = rotation;
+		this.position = position;
+		this.rotation = rotation;
 	}
 
 	public Transform()
 	{
-		Position = Vector2.Zero;
-		Rotation = 0f;
+		position = Vector2.Zero;
+		rotation = 0f;
 	}
 }
 

@@ -17,7 +17,8 @@ public class FirstGame : Engine.Game
 			,gridCellSize
 			,(g,x,y) => new GridItem(ref g, x, y));
 		engineGrid.Color = new(60,60,60);
-		Registrar.RegisterDrawable(engineGrid);
+
+		Registrar.RegisterDrawableInvoke(engineGrid);
 
 		Player player = new Player();
 		player.transform = new Transform(new Vector2(30, 100));

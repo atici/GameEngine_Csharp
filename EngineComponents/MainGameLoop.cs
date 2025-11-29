@@ -1,12 +1,10 @@
-using System.Runtime;
-using System.Security.Principal;
 using SDL3;
 
 namespace Engine;
 public class GameClock
 {
-	public static event EventHandler<float> ?Update;
-	public static event EventHandler ?Start;
+	public static event Action<float> ?Update;
+	public static event Action ?Start;
 
 	private float _update_clock = 1/Constants.TARGET_FPS;
 	private int _target_fps = Constants.TARGET_FPS; 
@@ -21,7 +19,7 @@ public class GameClock
 	float delta;
 	ulong lastTime = SDL.GetTicks();
 
-	public void InvokeStart() => Start?.Invoke(this, EventArgs.Empty);
+	public void InvokeStart() => Start?.Invoke();
 	public void InvokeUpdate()
 	{
 		ulong currentTime = SDL.GetTicks();
@@ -29,7 +27,7 @@ public class GameClock
 
 		if (delta >= _update_clock)
 		{
-			Update?.Invoke(this, delta);
+			Update?.Invoke(delta);
 			lastTime = currentTime;
 		}
 	}

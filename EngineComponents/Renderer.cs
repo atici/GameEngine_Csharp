@@ -37,12 +37,12 @@ public class Renderer
 		drawables.Remove(drawable);
 	}
 	public Renderer(nint canvas) {
-		Registrar.RegisterDrawableListener += (s, d) => _Register(d);
-		Registrar.DeRegisterDrawableListener += (s, d) => _DeRegister(d);
+		Registrar.RegisterDrawable += _Register;
+		Registrar.DeRegisterDrawable += _DeRegister;
 		this.canvas = canvas;
 	}
 	~Renderer() {
-		Registrar.RegisterDrawableListener -= (s, d) => _Register(d);
-		Registrar.DeRegisterDrawableListener += (s, d) => _DeRegister(d);
+		Registrar.RegisterDrawable -= _Register;
+		Registrar.DeRegisterDrawable += _DeRegister;
 	}
 }

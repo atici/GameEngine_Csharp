@@ -8,7 +8,11 @@ public class Player : GameObject
 	const float MOVE_SPEED = 500f;
 	Rect rect = new(30,50);
 
-	internal override void _Init() {
+	protected override void OnDestroy() {
+		Console.WriteLine($"[{SDL.GetTicks()}]{name} has been destroyed. Last known location: {transform.position.X}:{transform.position.Y}")	;
+	}
+
+	protected override void Init() {
 		name = "Player";
 		Circle circle = new Circle(50);
 		circle.color = Color.Green;
@@ -21,7 +25,7 @@ public class Player : GameObject
 		// rect.enabled = false;
 	}
 
-	internal override void _Update(float delta) {
+	protected override void Update(float delta) {
 		_HandleInput(delta);
 	}
 
@@ -31,16 +35,16 @@ public class Player : GameObject
 		switch (Input.KeyboardEvent.Key)
 		{
 			case SDL.Keycode.Right:
-				transform.Position += new Vector2(1,0) * delta * MOVE_SPEED;
+				transform.position += new Vector2(1,0) * delta * MOVE_SPEED;
 				break;
 			case SDL.Keycode.Left:
-				transform.Position += new Vector2(-1,0) * delta * MOVE_SPEED;
+				transform.position += new Vector2(-1,0) * delta * MOVE_SPEED;
 				break;
 			case SDL.Keycode.Up:
-				transform.Position += new Vector2(0,-1) * delta * MOVE_SPEED;
+				transform.position += new Vector2(0,-1) * delta * MOVE_SPEED;
 				break;
 			case SDL.Keycode.Down:
-				transform.Position += new Vector2(0,1) * delta * MOVE_SPEED;
+				transform.position += new Vector2(0,1) * delta * MOVE_SPEED;
 				break;
 			case SDL.Keycode.H:
 				if(rect != null && GetComponent(rect) != null) 
@@ -49,6 +53,13 @@ public class Player : GameObject
 			case SDL.Keycode.Y:
 				if (rect != null) 
 					AddComponent(rect);
+				break;
+			case SDL.Keycode.P:
+				Destroy();	
+				break;
+			case SDL.Keycode.R:
+				RemoveComponent(rect);
+				rect = new(50,50);
 				break;
 		}
 	}
