@@ -14,15 +14,13 @@ public class Rect : DrawableComponent
 		H=height
 	};
 
-	public Rect(float width, float height, GameObject gameObject) : base(gameObject)
-	{
+	public Rect(float width, float height, GameObject gameObject) : base(gameObject) {
 		this.width = width;
 		this.height = height;
 	}
 
 	public override bool Draw(nint canvas) {
-		if(!enabled) return false;
-
+		if(!enabled) return true;
 		SDL_e.SetRenderDrawColor(canvas, color);
 		if (fill)
 			return SDL.RenderFillRect(canvas, FRect);

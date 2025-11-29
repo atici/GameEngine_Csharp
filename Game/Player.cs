@@ -1,32 +1,31 @@
-using System.Numerics; using SDL3;
+using System.Numerics; 
+using SDL3;
 using Engine;
 
 namespace FirstGame;
 public class Player : GameObject
 {
 	const float MOVE_SPEED = 500f;
+	Rect ?rect;
 
-	internal override void _Init()
-	{
+	internal override void _Init() {
 		name = "Player";
 		Circle circle = new Circle(50, this);
 		circle.color = Color.Green;
 		circle.fill = false;
 		AddComponent(circle);
 
-		Rect rect = new Rect(30, 50, this);
+		rect = AddComponent(new Rect(30, 50, this));
 		rect.color = Color.Blue;
 		rect.fill = true;
-		AddComponent(rect);
+		// rect.enabled = false;
 	}
 
-	internal override void _Update(float delta)
-	{
+	internal override void _Update(float delta) {
 		_HandleInput(delta);
 	}
 
-	void _HandleInput(float delta)
-	{
+	void _HandleInput(float delta) {
 		if (!Input.KeyboardEvent.Down) return;
 
 		switch (Input.KeyboardEvent.Key)
@@ -42,6 +41,10 @@ public class Player : GameObject
 				break;
 			case SDL.Keycode.Down:
 				transform.Position += new Vector2(0,1) * delta * MOVE_SPEED;
+				break;
+			case SDL.Keycode.H:
+				if(rect != null) 
+					rect.enabled = !rect.enabled;
 				break;
 		}
 	}

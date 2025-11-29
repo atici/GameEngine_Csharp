@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using SDL3;
 
 namespace Engine;
@@ -29,10 +30,11 @@ public class GameObject
 		MainGameLoop.Update -= (s, d) => _Update(d); 
 	}
 
-	public GoComponent? GetComponent<TComponent>() where TComponent : GoComponent {
-		return components.FirstOrDefault((c) => c.GetType() is TComponent);
+	public TComponent? GetComponent<TComponent>(TComponent type) where TComponent : GoComponent {
+		return components.FirstOrDefault((c) => c.GetType() == type.GetType()) as TComponent;
 	}
-	public GoComponent? AddComponent<TComponent>(TComponent component) where TComponent : GoComponent {
+	public TComponent AddComponent<TComponent>(TComponent component) where TComponent : GoComponent {
+		// Debug.Assert(component != null);
 		components.Add(component);
 		return component;
 	}

@@ -3,7 +3,7 @@ using SDL3;
 namespace Engine;
 public class Renderer
 {
-	private nint canvas;
+	private nint canvas = 0;
 	private HashSet<IDrawable> drawables = new();
 
 	public Color BGcolor = new Color(20,20,20);
@@ -26,6 +26,8 @@ public class Renderer
 		SDL_e.SetRenderDrawColor(canvas, BGcolor);
 		return SDL.RenderClear(canvas);
 	}
+
+	public void SetCanvas(nint canvas) => this.canvas = canvas;
 
 	void _Register(ref IDrawable drawable) {
 		if (drawables.Contains(drawable)) return;

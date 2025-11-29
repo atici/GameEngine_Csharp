@@ -1,4 +1,3 @@
-using System.ComponentModel;
 using System.Numerics;
 using Engine;
 
@@ -27,6 +26,7 @@ internal static class Program
 {
 	public static void Main() {
 		Console.WriteLine("Starting");
-		Engine.Engine.Start(new FirstGame());
+		FirstGame game = new FirstGame();
+		game.Start();
 	}
 }
