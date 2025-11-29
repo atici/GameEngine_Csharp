@@ -2,6 +2,7 @@
 using System.Numerics;
 using Engine;
 using Microsoft.VisualBasic;
+using SDL3;
 
 namespace Snake;
 
@@ -30,24 +31,26 @@ public class MainLoop : GameObject {
 	Grid<Section> grid; 
 	Queue<Section> snake;
 
-	Section ?head;
+	Section head;
 
 	public MainLoop(EngineOptions options) {
 		engineOptions = options;	
-		grid = CreateGrid();
-		CreateSnake(SNAKE_START_SIZE);
-	}
 
+		snake = new Queue<Section>();
+		grid = CreateGrid();
+		CreateAndSetSnake(SNAKE_START_SIZE, out head);
+	}
 
 	protected override void Update(float delta) {
+		_HandleInput(delta);
 	}
 
-	void CreateSnake(int startingSections) {
-		snake = new Queue<Section>();
+	void CreateAndSetSnake(int startingSections, out Section _head) {
 		Vector2 nextPos = new Vector2(
 			(int)(HEIGHT * 0.5f - MathF.Ceiling(startingSections*0.5f)),
 			(int)(WIDTH * 0.5f));
-		head = grid.GetValue(nextPos);
+		_head = grid.GetValue(nextPos);
+		snake.Enqueue(_head);
 		for (int i = 1; i < startingSections; i++) {
 			nextPos.X++;
 			MoveHead(nextPos);
@@ -61,8 +64,12 @@ public class MainLoop : GameObject {
 
 	void MoveSnake(Vector2 pos) {
 		if (head == null) return;
-		if( pos.X >= grid.width || pos.Y >= grid.height) {
-			// Game Over
+		if (pos.X >= grid.width 
+			|| pos.Y >= grid.height
+			|| pos.X < 0 
+			|| pos.Y < 0) {
+			//  Dead Snake
+			return;
 		}
 		Section nextSection = grid.GetValue(pos);
 
@@ -87,5 +94,34 @@ public class MainLoop : GameObject {
 		snake.Enqueue(next);
 		next.state = Section.State.Head;
 		head = next;
+	}
+
+	float deltaTime = 0f;
+	void _HandleInput(float delta) {
+		deltaTime += delta;
+		if (!Input.KeyboardEvent.Down) return;
+		if( deltaTime < 0.25f) {
+			return;
+		}
+		deltaTime = 0f;
+
+		switch (Input.KeyboardEvent.Key)
+		{
+			case SDL.Keycode.Right:
+				MoveSnake(head.gridPos + Physics.Vector2_Right);
+				break;
+			case SDL.Keycode.Left:
+				MoveSnake(head.gridPos + Physics.Vector2_Left);
+				break;
+			case SDL.Keycode.Up:
+				MoveSnake(head.gridPos + Physics.Vector2_Up);
+				break;
+			case SDL.Keycode.Down:
+				MoveSnake(head.gridPos + Physics.Vector2_Down);
+				break;
+			case SDL.Keycode.R:
+			 	// Reset Logic
+				break;
+		}
 	}
 }
