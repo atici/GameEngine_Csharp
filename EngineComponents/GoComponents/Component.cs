@@ -5,7 +5,7 @@ public abstract class Component
 	public GameObject gameObject {get; private set;}
 	public Transform transform => gameObject.transform;
 
-	public Component(GameObject gameObject) {
+	public Component(GameObject gameObject, bool addToComponents = true) {
 		this.gameObject = gameObject;
 		gameObject.AddComponent(this);
 		Init();
@@ -13,8 +13,8 @@ public abstract class Component
 
 	private bool _destroyed = false;
 
-	public virtual void Init(){}
-	public virtual void OnDestroy(){}
+	protected virtual void Init(){}
+	protected virtual void OnDestroy(){}
 
 	public void Destroy() {
 		if(_destroyed) return;

@@ -193,11 +193,6 @@ public class MainLoop : GameObject {
 	Grid<Section> CreateGrid() {
 		Vector2 gridOffset = new Vector2(WIDTH * CELL_SIZE * 0.5f, HEIGHT * CELL_SIZE * 0.5f);
 		Vector2 gridOriginPosition = new Vector2(Snake.engineOptions.window_width, Snake.engineOptions.window_height) * 0.5f - gridOffset;
-		return new Grid<Section>(WIDTH, HEIGHT, CELL_SIZE, gridOriginPosition, (g, x, y) => new Section(x, y, g));
-	}
-
-	protected override void OnDestroy() {
-		foreach(Section s in grid)
-			s.Destroy();
+		return new Grid<Section>(WIDTH, HEIGHT, CELL_SIZE, gridOriginPosition, (g, x, y) => AddChildren(new Section(x, y, g)) ?? default! );
 	}
 }

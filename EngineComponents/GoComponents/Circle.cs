@@ -6,7 +6,7 @@ public class Circle : DrawableComponent
 	public float radius;
 	public bool fill = true;
 
-	public Circle(float radius, GameObject go) : base(go) {
+	public Circle(GameObject go, float radius) : base(go) {
 		this.radius = radius;
 	}
 

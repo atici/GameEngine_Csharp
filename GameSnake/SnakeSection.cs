@@ -36,7 +36,7 @@ public class Section : GameObject{
 	public Section(int x, int y, Grid<Section> g) {
 		float size = g.cellSize;
 		transform.position = new Vector2(x * size + g.originPosition.X, y * size + g.originPosition.Y);
-		rect = new Rect(size - 2f, size - 2f, this);
+		rect = new Rect(this, size - 2f, size - 2f);
 		state = State.Empty;
 		gridPos = new Vector2(x,y);
 	}

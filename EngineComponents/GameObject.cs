@@ -79,4 +79,16 @@ public class GameObject
 			RemoveComponent(comp);
 	}
 #endregion
+#region Children
+	public Transform? AddChildren(Transform transform) => transform.AddChildren(transform);
+	public TGameObject? AddChildren<TGameObject>(TGameObject go) where TGameObject : GameObject => AddChildren(go.transform)?.gameObject as TGameObject;
+	public bool RemoveChild(Transform child) => transform.RemoveChild(child);
+	public GameObject? GetChild(int index) => transform.GetChild(index)?.gameObject;
+	public List<GameObject> GetAllChildren() {
+		List<GameObject> result = new();
+		foreach(Transform c in transform.GetAllChildren())
+			result.Add(c.gameObject);
+		return result;
+	}
+	#endregion
 }

@@ -14,11 +14,11 @@ public class Player : GameObject
 
 	protected override void Init() {
 		name = "Player";
-		Circle circle = new Circle(50, this);
+		Circle circle = new Circle(this, 50);
 		circle.color = Color.Green;
 		circle.fill = false;
 
-		rect = new Rect(30, 50, this);
+		rect = new Rect(this, 30, 50);
 		rect.color = Color.Blue;
 		rect.fill = true;
 		// rect.enabled = false;
@@ -58,8 +58,8 @@ public class Player : GameObject
 				break;
 			case SDL.Keycode.R:
 				RemoveComponent(rect);
-				rect = new(50,50, this);
-				rect.color = new(Engine.Random.Range(0, 255),Engine.Random.Range(0, 255), Engine.Random.Range(0, 255));
+				rect = new(this, 50, 50);
+				rect.color = new(Engine.Random.Range(0, 255), Engine.Random.Range(0, 255), Engine.Random.Range(0, 255));
 				AddComponent(rect);
 				break;
 		}
