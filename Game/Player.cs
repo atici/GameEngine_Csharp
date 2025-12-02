@@ -16,7 +16,7 @@ public class Player : GameObject
 		name = "Player";
 		Circle circle = new Circle(this, 50);
 		circle.color = Color.Green;
-		circle.fill = false;
+		circle.fill = true;
 
 		rect = new Rect(this, 30, 50);
 		rect.color = Color.Blue;

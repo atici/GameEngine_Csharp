@@ -7,7 +7,8 @@ public abstract class Component
 
 	public Component(GameObject gameObject, bool addToComponents = true) {
 		this.gameObject = gameObject;
-		gameObject.AddComponent(this);
+		if (addToComponents)
+			gameObject.AddComponent(this);
 		Init();
 	}
 

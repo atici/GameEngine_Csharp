@@ -46,10 +46,12 @@ public class Transform : Component
 		child.parent = null;
 		return true;
 	}
+
 	public Transform? GetChild(int index) {
 		if (index >= children.Count) return null;
 		return children[index];
 	}
+
 	public List<Transform> GetAllChildren() {
 		return children.ToList();
 	}
