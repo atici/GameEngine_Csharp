@@ -1,27 +1,4 @@
-using System.Numerics;
-
 namespace Engine;
-public struct Transform
-{
-	public Vector2 position;
-	public float rotation;
-
-	public bool is_static = false;
-	// Matrix3x2 translateToLocal => Matrix3x2.CreateTranslation(Position);
-	
-	public Transform(Vector2 position, float rotation = 0f)
-	{
-		this.position = position;
-		this.rotation = rotation;
-	}
-
-	public Transform()
-	{
-		position = Vector2.Zero;
-		rotation = 0f;
-	}
-}
-
 public struct Color
 {
 	public byte R = 0;

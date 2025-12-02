@@ -126,6 +126,11 @@ public class MainLoop : GameObject {
 				snake.Dequeue().state = Section.State.Empty;
 				break;
 			case Section.State.Body:
+				if(nextSection == snake.Peek()) { // Check if its the tail. if it is move tail first so we can move there.
+					snake.Dequeue();
+					MoveHead(nextSection);
+					break;
+				}
 				Die();
 				break;
 			case Section.State.Food:

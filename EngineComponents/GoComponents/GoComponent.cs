@@ -1,21 +1,27 @@
 namespace Engine;
-public abstract class GoComponent
+public abstract class Component
 {
 	public bool enabled = true;
-	public GameObject ?gameObject {get; private set;}
-	public Transform transform => gameObject == null ? default! : gameObject.transform;
+	public GameObject gameObject {get; private set;}
+	public Transform transform => gameObject.transform;
 
-	public virtual void OnAdd(){}
-	public virtual void OnRemove(){}
-
-	internal void internal_AddToGO(GameObject gameObject) {
+	public Component(GameObject gameObject) {
 		this.gameObject = gameObject;
-		if(this.gameObject != null) OnAdd();
-	} 
+		gameObject.AddComponent(this);
+		Init();
+	}
 
-	internal void internal_Remove() {
-		if(gameObject == null) return;
-		OnRemove(); // This needs to go first.
-		gameObject = null;
+	private bool _destroyed = false;
+
+	public virtual void Init(){}
+	public virtual void OnDestroy(){}
+
+	public void Destroy() {
+		if(_destroyed) return;
+		_destroyed = true;
+
+		enabled = false;
+		gameObject.RemoveComponent(this);
+		OnDestroy(); // This needs to go first.
 	}
 }

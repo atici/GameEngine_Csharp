@@ -2,21 +2,20 @@ namespace Engine;
 public class GameObject
 {
 	public string name = "Gameobject";
-	public Transform transform = new();
-	public HashSet<GoComponent> components = new();
+	public Transform transform { get; }
 
+	private HashSet<Component> components { get; } = new();
+	private bool _destroyed = false;
 	private bool _enabled = true;
 	public bool enabled {
 		get => _enabled;
 		set {
-			if (isDestroyed) return;
-			foreach(GoComponent comp in components)
+			if (_destroyed) return;
+			foreach(Component comp in components)
 				comp.enabled = value;
 			_enabled = value;
 		}
-	} 
-
-	private bool isDestroyed = false;
+	}
 
 	protected virtual void Init(){}
 	protected virtual void Start(){}
@@ -25,7 +24,6 @@ public class GameObject
 
 	private void _Start() {
 		if (!enabled) return;
-		// Registrar.RegisterPhysicsInvoke(this);
 		Start();
 	}
 
@@ -39,43 +37,46 @@ public class GameObject
 	}
 
 	public GameObject(bool enabled = true) {
-		this.enabled = enabled;
+		transform = new Transform(this);
 		GameClock.Start += _Start;
 		GameClock.Update += _Update; 
+		this.enabled = enabled;
 		_Init();
 	}
 
 	public void Destroy() {
-		if(isDestroyed) return;
-		isDestroyed = true;
+		if(_destroyed) return;
+		_destroyed = true;
+
 		enabled = false;
 		GameClock.Start -= _Start;
 		GameClock.Update -= _Update; 
 		OnDestroy();
-		internal_RemoveAllComponents();
+		_RemoveAllComponents();
 	}
 
-	public TComponent? GetComponent<TComponent>() where TComponent : GoComponent {
+#region Components
+	public TComponent? GetComponent<TComponent>() where TComponent : Component {
 		return components.FirstOrDefault((c) => c is TComponent) as TComponent;
 	}
-	public TComponent AddComponent<TComponent>(TComponent component) where TComponent : GoComponent {
-		// Debug.Assert(component != null);
+	public TComponent? AddComponent<TComponent>(TComponent component) where TComponent : Component {
+		if (component.gameObject != this) return null;
 		components.Add(component);
-		component.internal_AddToGO(this);
 		return component;
 	}
-	public bool RemoveComponent<TComponent>(TComponent component) where TComponent : GoComponent {
+	public bool RemoveComponent<TComponent>(TComponent? component) where TComponent : Component {
+		if(component == null) return false;
 		bool result = components.Remove(component);
 		if(!result) return false;
-		component.internal_Remove();
+		component.Destroy();
 		return result;
 	}
-
-	private void internal_RemoveAllComponents() {
-		// Copying to a new array because RemoveComponent modifies the components HasMap.
-		GoComponent[] componentsCopy = new GoComponent[components.Count];
+	private void _RemoveAllComponents() {
+		// Copying to a new array because RemoveComponent modifies the components HashSet.
+		Component[] componentsCopy = new Component[components.Count];
 		components.CopyTo(componentsCopy);	
-		foreach(GoComponent comp in componentsCopy)
+		foreach(Component comp in componentsCopy)
 			RemoveComponent(comp);
 	}
+#endregion
 }

@@ -6,7 +6,7 @@ namespace FirstGame;
 public class Player : GameObject
 {
 	const float MOVE_SPEED = 500f;
-	Rect rect = new(30,50);
+	Rect? rect;
 
 	protected override void OnDestroy() {
 		Console.WriteLine($"[{SDL.GetTicks()}]{name} has been destroyed. Last known location: {transform.position.X}:{transform.position.Y}")	;
@@ -14,12 +14,11 @@ public class Player : GameObject
 
 	protected override void Init() {
 		name = "Player";
-		Circle circle = new Circle(50);
+		Circle circle = new Circle(50, this);
 		circle.color = Color.Green;
 		circle.fill = false;
-		AddComponent(circle);
 
-		rect = AddComponent(new Rect(30, 50));
+		rect = new Rect(30, 50, this);
 		rect.color = Color.Blue;
 		rect.fill = true;
 		// rect.enabled = false;
@@ -59,7 +58,7 @@ public class Player : GameObject
 				break;
 			case SDL.Keycode.R:
 				RemoveComponent(rect);
-				rect = new(50,50);
+				rect = new(50,50, this);
 				rect.color = new(Engine.Random.Range(0, 255),Engine.Random.Range(0, 255), Engine.Random.Range(0, 255));
 				AddComponent(rect);
 				break;
