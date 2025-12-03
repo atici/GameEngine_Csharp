@@ -12,19 +12,18 @@ public class Section : GameObject{
 			switch (value) {
 				case State.Empty:
 					rect.color = Color.Black;
-				break;
+					break;
 				case State.Body:
 					rect.color = Color.White;
-				break;
+					break;
 				case State.Head:
 					rect.color = Color.Green;
-				break;
+					break;
 				case State.Food:
 					rect.color = Color.Red;
-				break;
+					break;
 				case State.Dead:
-					// rect.color = new Color(128, 0, 128);
-				break;
+					break;
 			}
 			_state = value;
 		}
@@ -39,8 +38,5 @@ public class Section : GameObject{
 		rect = new Rect(this, size - 2f, size - 2f);
 		state = State.Empty;
 		gridPos = new Vector2(x,y);
-	}
-
-	protected override void Init() {
 	}
 }

@@ -1,3 +1,6 @@
+using System.Drawing;
+using System.Numerics;
+
 namespace SDL3;
 
 public static class SDL_e
@@ -49,4 +52,49 @@ public static class SDL_e
 		return result.ToArray();
 	}
 	public static SDL.FPoint MakeFPoint(float x, float y) => new SDL.FPoint { X = x, Y = y };
+
+	public static SDL.FPoint[] FillRect(SDL.FPoint[] corners) {
+		List<SDL.FPoint> result = new();
+		Vector2 topStart = FPoint2Vector(corners[0]);
+		Vector2 topEnd = FPoint2Vector(corners[1]);
+		Vector2 topDir = Vector2.Normalize(topEnd - topStart);
+		Vector2 bottomStart = FPoint2Vector(corners[3]);
+		Vector2 bottomEnd = FPoint2Vector(corners[2]);
+		Vector2 bottomDir = Vector2.Normalize(bottomEnd - bottomStart);	
+
+		float topEndMag = topEnd.Length();
+		float bottomEndMag = bottomEnd.Length();
+		
+		Vector2 currentTop = topStart;
+		Vector2 currentBottom = bottomStart;
+		while(true){
+			currentTop += topDir;
+			currentBottom += bottomDir;
+			bool topCond = currentTop.Length() < topEndMag;
+			bool bottomCond = currentBottom.Length() < bottomEndMag;
+			if (topCond) {
+				result.Add(Vector2FPoint(currentTop));
+			} else
+				result.Add(Vector2FPoint(topEnd));
+
+			if (bottomCond) {
+				result.Add(Vector2FPoint(currentBottom));
+			} else 
+				result.Add(Vector2FPoint(bottomEnd));
+			
+			if(!topCond && !bottomCond) break;
+		}
+		return result.ToArray();
+	}
+
+	public static SDL.FPoint RotatePoint(SDL.FPoint point, float delta) {
+		delta *= Engine.Conversion.Deg2Rad;
+		return new SDL.FPoint {
+			X = point.X * MathF.Cos(delta) - point.Y * MathF.Sin(delta),
+			Y = point.X * MathF.Sin(delta) + point.Y * MathF.Cos(delta)
+		};
+	}
+
+	public static SDL.FPoint Vector2FPoint(Vector2 v) => MakeFPoint(v.X, v.Y);
+	public static Vector2 FPoint2Vector(SDL.FPoint p) => new Vector2(p.X, p.Y);
 }

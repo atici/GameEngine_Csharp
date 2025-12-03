@@ -83,13 +83,30 @@ public class MainLoop : GameObject {
 
 	void Die() {
 		isDead = true;
+
+
+		int r = 255;
+		int g = 0;
+		int b = 0;
+		int inc = 35;
 		foreach(Section s in snake) {
-			Color color = new Color(
-				Engine.Random.Range(128, 255)
-				,Engine.Random.Range(0, 192)
-				,Engine.Random.Range(64, 255));
+			// Make it a rainbow baby!
+			if (r - inc - b > 0) {
+				r -= inc - b;
+				g = 255 - r;
+				b = 0;
+			} else if(g > 0) {
+				r = 0;
+				g -= inc;
+				b = 255 - g;
+			} else if(b > 0) {
+				r = 255 - b;
+				g = 0;
+				b -= inc; 
+			}
+			Color color = new Color( r,g,b);
 			Rect ?rect = s.GetComponent<Rect>();
-			if(rect != null)
+			if(rect != null)  	
 				rect.color = color;	
 			s.state = Section.State.Dead;
 		}

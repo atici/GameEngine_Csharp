@@ -1,3 +1,5 @@
+using SDL3;
+
 namespace Engine;
 public struct Color
 {
@@ -31,4 +33,5 @@ public struct Color
 	public static Color Red 	=> new Color(255,0,0,255);
 	public static Color Green	=> new Color(0,255,0,255);
 	public static Color Blue	=> new Color(0,0,255,255);
-}
+
+	public SDL.FColor SDL_FColor => new SDL.FColor(R / 256f, G / 256f, B / 256f, A / 256f); }
