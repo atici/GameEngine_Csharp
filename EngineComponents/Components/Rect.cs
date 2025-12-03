@@ -1,7 +1,4 @@
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
 using SDL3;
-using Snake;
 
 namespace Engine;
 public class Rect : DrawableComponent

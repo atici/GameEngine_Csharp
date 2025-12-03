@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Numerics;
 
@@ -15,17 +16,8 @@ public class Transform : Component
 		}
 	}
 	public Vector2 localPosition {
-		get {
-			if(parent == null) return _position;
-			return _position - parent.position;
-		} 
-		set {
-			if(parent == null) {
-				_position = value;
-				return;
-			}
-			_position = value + parent.position;
-		}
+		get => parent == null ? _position : _position - parent.position; 
+		set => _position = parent == null ? value : value + parent.position;
 	} 
 	public float rotation;
 	public float localRotation;
@@ -51,7 +43,7 @@ public class Transform : Component
 	}
 
 	protected override void OnDestroy() {
-		foreach( Transform c in children)
+		foreach( Transform c in children.ToList())
 			c.Destroy();
 		gameObject.Destroy();
 	}
@@ -63,7 +55,8 @@ public class Transform : Component
 	/// <param name="child"></param>
 	/// <returns>Transform thats been added as child.</returns>
 	public Transform AddChild(Transform child) {
-		if (children.Contains(child)) return child;
+		Debug.Assert(child != this, "Child can not be itself.");
+		Debug.Assert(child != null);
 		if (child.parent != null) {
 			child.parent.RemoveChild(child);
 		}
@@ -81,12 +74,10 @@ public class Transform : Component
 		child.parent = null;
 		return true;
 	}
-
 	public Transform? GetChild(int index) {
 		if (index >= children.Count) return null;
 		return children[index];
 	}
-
 	public List<Transform> GetAllChildren() {
 		return children.ToList();
 	}

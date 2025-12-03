@@ -20,9 +20,15 @@ public abstract class Component
 	public void Destroy() {
 		if(_destroyed) return;
 		_destroyed = true;
-
 		enabled = false;
 		gameObject.RemoveComponent(this);
+		OnDestroy(); // This needs to go first.
+	}
+
+	internal void internal_Destroy() {
+		if(_destroyed) return;
+		_destroyed = true;
+		enabled = false;
 		OnDestroy(); // This needs to go first.
 	}
 }

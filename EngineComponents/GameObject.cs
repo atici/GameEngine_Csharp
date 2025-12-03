@@ -1,4 +1,5 @@
 using System.ComponentModel;
+using System.Diagnostics;
 
 namespace Engine;
 public class GameObject
@@ -56,6 +57,8 @@ public class GameObject
 		OnDestroy();
 		if(transform.parent != null)
 			transform.parent.RemoveChild(transform);
+		// Destroy Components.
+		transform.Destroy();
 		_RemoveAllComponents();
 	}
 
@@ -68,28 +71,20 @@ public class GameObject
 		components.Add(component);
 		return component;
 	}
-	public bool RemoveComponent<TComponent>(TComponent? component) where TComponent : Component {
-		if(component == null) return false;
-		bool result = components.Remove(component);
-		if(!result) return false;
-		component.Destroy();
-		return result;
+	public bool RemoveComponent<TComponent>(TComponent component) where TComponent : Component {
+		Debug.Assert(component != null);
+		component.internal_Destroy();
+		return components.Remove(component);
 	}
 	private void _RemoveAllComponents() {
-		// Copying to a new array because RemoveComponent modifies the components HashSet.
-		Component[] componentsCopy = new Component[components.Count];
-		components.CopyTo(componentsCopy);	
-		foreach(Component comp in componentsCopy)
+		foreach(Component comp in components.ToList())
 			RemoveComponent(comp);
 	}
 #endregion
 #region Children
 	public Transform AddChild(Transform transform) => this.transform.AddChild(transform);
-
 	public TGameObject AddChild<TGameObject>(TGameObject go) where TGameObject : GameObject => (TGameObject)AddChild(go.transform).gameObject;
-
 	public bool RemoveChild(Transform child) => transform.RemoveChild(child);
-
 	public GameObject? GetChild(int index) => transform.GetChild(index)?.gameObject;
 	public List<GameObject> GetAllChildren() {
 		List<GameObject> result = new();
