@@ -1,4 +1,5 @@
 using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using SDL3;
 using Snake;
 
@@ -29,6 +30,7 @@ public class Rect : DrawableComponent
 	}
 	public bool fill = true;
 
+	static readonly int[] indices = [0,1,2,2,3,0];
 	public SDL.FPoint[] corners = new SDL.FPoint[4]; // Top right to clockwise.
 
 	public Rect(GameObject go, float width, float height) : base(go) {
@@ -38,21 +40,20 @@ public class Rect : DrawableComponent
 
 	public override bool Draw(nint canvas) {
 		if(!enabled) return true;
-
+		// Create the calculated points.
 		SDL.FPoint[] calculatedPoints = new SDL.FPoint[5]; 
 		corners.CopyTo(calculatedPoints, 0);
+		calculatedPoints[4] = SDL_e.MakeFPoint(calculatedPoints[0].X, calculatedPoints[0].Y);
+		// Calculate world positions.
 		for (int i = 0; i < 4; i++) {
 			calculatedPoints[i] = SDL_e.RotatePoint(calculatedPoints[i], transform.rotation);
 			calculatedPoints[i].X += transform.position.X;
 			calculatedPoints[i].Y += transform.position.Y;
 		}
-		if (fill) {
-			int[] indices = [0,1,2,2,3,0];
-			return SDL.RenderGeometry(canvas, default, GetVertices(calculatedPoints), 4, indices, 6);
-		} 
+		if (fill)
+			return SDL.RenderGeometry(canvas, default, GetVertices(calculatedPoints[0..4]), 4, indices, 6);
 		SDL_e.SetRenderDrawColor(canvas, color);
-		calculatedPoints[4] = SDL_e.MakeFPoint(calculatedPoints[0].X, calculatedPoints[0].Y);
-		return SDL.RenderLines(canvas, calculatedPoints, calculatedPoints.Length);
+		return SDL.RenderLines(canvas, calculatedPoints, 4);
 	}
 
 	SDL.Vertex[] GetVertices(SDL.FPoint[] fPoints) {

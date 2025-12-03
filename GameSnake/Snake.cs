@@ -88,8 +88,8 @@ public class MainLoop : GameObject {
 		int r = 255;
 		int g = 0;
 		int b = 0;
-		int inc = 35;
-		foreach(Section s in snake) {
+		int inc = 32;
+		foreach(Section s in snake.Reverse()) {
 			// Make it a rainbow baby!
 			if (r - inc - b > 0) {
 				r -= inc - b;
