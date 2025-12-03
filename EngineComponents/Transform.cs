@@ -1,13 +1,48 @@
+using System.Diagnostics;
 using System.Numerics;
 
 namespace Engine;
 public class Transform : Component
 {
-	public Vector2 position;
+	// protected Vector2 parentOffset;
+	private Vector2 _position;
+	public Vector2 position {
+		get => _position;
+		set {
+			foreach(Transform c in children)
+				c.position = c.localPosition + value;
+			_position = value; 
+		}
+	}
+	public Vector2 localPosition {
+		get {
+			if(parent == null) return _position;
+			return _position - parent.position;
+		} 
+		set {
+			if(parent == null) {
+				_position = value;
+				return;
+			}
+			_position = value + parent.position;
+		}
+	} 
 	public float rotation;
+	public float localRotation;
+
 	public bool is_static = false;
 
-	public Transform? parent { get; protected set; } = null;
+	private Transform? _parent;
+	public Transform? parent { 
+		get => _parent; 
+		protected set {
+			if (value != null) {
+				Debug.Assert(value != this, "Parent can not be itself.");
+				Debug.Assert(!children.Contains(value), "Child of a Transform cannot be its parent. Use RemoveChild() first.");
+			}
+			_parent = value;
+		} 
+	}
 	private List<Transform> children { get; } = new();
 
 	public Transform(GameObject gameObject) : base(gameObject, addToComponents:false) {
@@ -27,8 +62,8 @@ public class Transform : Component
 	/// </summary>
 	/// <param name="child"></param>
 	/// <returns>Transform thats been added as child.</returns>
-	public Transform? AddChildren(Transform child) {
-		if (children.Contains(child)) return null;
+	public Transform AddChild(Transform child) {
+		if (children.Contains(child)) return child;
 		if (child.parent != null) {
 			child.parent.RemoveChild(child);
 		}

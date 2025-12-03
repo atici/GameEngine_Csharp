@@ -17,6 +17,7 @@ public class Snake : Game {
 
 	public override void StartEngine() {
 		_Engine.options.window_name = "Snake v1.0";
+		_Engine.renderer.BGcolor = new Color(70,70,70);
 		base.StartEngine();
 	}
 }
@@ -26,6 +27,7 @@ public class GameStarter : GameObject {
 	protected override void Start() {
 		main.Destroy();
 		main = new MainLoop();
+		transform.AddChild(main.transform);
 	}
 
 	float inputDeltaTime = 0f;
@@ -35,6 +37,14 @@ public class GameStarter : GameObject {
 		inputDeltaTime = 0;	
 		if (Input.GetKeyDown(SDL.Keycode.R))
 			Start();
+		if (Input.GetKeyDown(SDL.Keycode.K))
+			transform.position += Physics.Vector2_Up * 10;
+		if (Input.GetKeyDown(SDL.Keycode.J))
+			transform.position += Physics.Vector2_Down * 10;
+		if (Input.GetKeyDown(SDL.Keycode.L))
+			transform.position += Physics.Vector2_Right * 10;
+		if (Input.GetKeyDown(SDL.Keycode.H))
+			transform.position += Physics.Vector2_Left * 10;
 	}
 }
 
@@ -83,7 +93,6 @@ public class MainLoop : GameObject {
 
 	void Die() {
 		isDead = true;
-
 
 		int r = 255;
 		int g = 0;
@@ -210,6 +219,6 @@ public class MainLoop : GameObject {
 	Grid<Section> CreateGrid() {
 		Vector2 gridOffset = new Vector2(WIDTH * CELL_SIZE * 0.5f, HEIGHT * CELL_SIZE * 0.5f);
 		Vector2 gridOriginPosition = new Vector2(Snake.engineOptions.window_width, Snake.engineOptions.window_height) * 0.5f - gridOffset;
-		return new Grid<Section>(WIDTH, HEIGHT, CELL_SIZE, gridOriginPosition, (g, x, y) => AddChildren(new Section(x, y, g)) ?? default! );
+		return new Grid<Section>(WIDTH, HEIGHT, CELL_SIZE, gridOriginPosition, (g, x, y) => AddChild(new Section(x, y, g)) );
 	}
 }

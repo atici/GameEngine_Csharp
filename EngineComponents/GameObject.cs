@@ -1,3 +1,5 @@
+using System.ComponentModel;
+
 namespace Engine;
 public class GameObject
 {
@@ -52,6 +54,8 @@ public class GameObject
 		GameClock.Start -= _Start;
 		GameClock.Update -= _Update; 
 		OnDestroy();
+		if(transform.parent != null)
+			transform.parent.RemoveChild(transform);
 		_RemoveAllComponents();
 	}
 
@@ -80,9 +84,9 @@ public class GameObject
 	}
 #endregion
 #region Children
-	public Transform? AddChildren(Transform transform) => transform.AddChildren(transform);
+	public Transform AddChild(Transform transform) => this.transform.AddChild(transform);
 
-	public TGameObject? AddChildren<TGameObject>(TGameObject go) where TGameObject : GameObject => AddChildren(go.transform)?.gameObject as TGameObject;
+	public TGameObject AddChild<TGameObject>(TGameObject go) where TGameObject : GameObject => (TGameObject)AddChild(go.transform).gameObject;
 
 	public bool RemoveChild(Transform child) => transform.RemoveChild(child);
 
